@@ -1,0 +1,17 @@
+.navbar__container {
+  position: fixed;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  .navbar__content {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 8px;
+  }
+}
