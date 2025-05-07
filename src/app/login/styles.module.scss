@@ -1,0 +1,54 @@
+.login__container {
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  .login__content {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .content__card {
+      width: 80%;
+      max-width: 300px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+
+      background-color: #151b23;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+
+      padding: 32px;
+
+      * {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .card__title {
+        margin: 0;
+      }
+
+      .card__form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+
+        .username,
+        .password,
+        .submit {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
