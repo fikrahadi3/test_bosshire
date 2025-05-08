@@ -17,10 +17,10 @@ export type Product = {
 };
 
 export type Cart = {
-  id: number;
-  userId: number;
-  date: string;
-  products: Product[];
+  id?: number;
+  userId?: number;
+  date?: string;
+  products?: Product[];
 };
 
 export type GetCartsByIDReq = {
