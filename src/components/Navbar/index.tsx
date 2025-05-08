@@ -1,24 +1,31 @@
 "use client";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Avatar } from "@mui/material";
 
-import { getCookie } from "../../shared/cookies";
+import { User } from "../../types/user";
 
 import styles from "./utils/styles.module.scss";
-import { useEffect, useState } from "react";
-import Link from "next/link";
 
 const Navbar = () => {
   const [name, setName] = useState("");
 
-  const getName = async () => {
-    const username = await getCookie("username");
-    setName(String(username?.value || ""));
+  const getName = () => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const {
+        name: { firstname, lastname },
+      }: User = JSON.parse(user);
+      setName(`${firstname || ""} ${lastname || ""}`);
+      return;
+    }
+    setName("");
   };
 
   useEffect(() => {
     getName();
-  }, []);
+  }, [location.pathname]);
 
   return (
     <header className={styles.navbar__container}>

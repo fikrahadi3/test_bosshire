@@ -1,10 +1,12 @@
 "use client";
 
+import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Product, ProductDetail } from "../../../../../types/carts";
 import { addCart, getProducts } from "../../../../../services/carts";
+import { Cart, Product, ProductDetail } from "../../../../../types/carts";
+import { User } from "../../../../../types/user";
 
 import { isDuplicate, isLessThanZero } from "./functions";
 
@@ -14,6 +16,8 @@ const useCreate = () => {
   const [datas, setDatas] = useState<Product[]>([]);
   const [products, setProducts] = useState<ProductDetail[]>([]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [snackbar, setSnackbar] = useState<any>({
     open: false,
     message: "",
@@ -21,6 +25,7 @@ const useCreate = () => {
   });
 
   const getAllProducts = async () => {
+    setIsLoading(true);
     try {
       const resp = await getProducts();
       const data: ProductDetail[] = await resp.json();
@@ -34,6 +39,7 @@ const useCreate = () => {
         severity: "error",
       });
     }
+    setIsLoading(false);
   };
 
   const handleDeleteProduct = (productId: number) => {
@@ -69,20 +75,51 @@ const useCreate = () => {
     ]);
   };
 
+  const handleLocalStorage = (newValue: Cart) => {
+    const data = localStorage.getItem("carts") || "[]";
+    if (data) {
+      localStorage.setItem(
+        "carts",
+        JSON.stringify([...JSON.parse(data), newValue])
+      );
+      return;
+    }
+    localStorage.setItem("carts", JSON.stringify([newValue]));
+  };
+
   const handleSubmit = async () => {
+    setIsLoading(true);
+    if (datas.length <= 0) {
+      setSnackbar({
+        open: true,
+        message: "Cart Empty",
+        severity: "error",
+      });
+      setIsLoading(true);
+      return;
+    }
+
     try {
-      await addCart({
-        userId: 1,
+      const user: User = JSON.parse(localStorage.getItem("user") || "{}");
+      const resp = await addCart({
+        userId: user.id || 1,
         products: datas.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
         })),
       });
 
+      const data = await resp.json();
+
       setSnackbar({
         open: true,
         message: "Create Cart Success",
         severity: "success",
+      });
+
+      handleLocalStorage({
+        ...data,
+        date: String(moment()),
       });
     } catch (err) {
       let mess = "Unknown Error";
@@ -93,6 +130,7 @@ const useCreate = () => {
         severity: "error",
       });
     } finally {
+      setIsLoading(true);
       router.push("/dashboard/cart");
     }
   };
@@ -107,6 +145,7 @@ const useCreate = () => {
 
   return {
     datas,
+    isLoading,
     products,
     snackbar,
     handleAddProduct,

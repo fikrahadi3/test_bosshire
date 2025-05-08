@@ -52,7 +52,7 @@ const ProductCard = ({
               precision={0.5}
               readOnly
             />
-            <p>{rating.count}</p>
+            <p>{rating.count} Reviews</p>
           </div>
           <div className={styles.text__price}>Price: $ {price}</div>
         </Box>

@@ -17,12 +17,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     const isAlreadyLogin = await checkCookie();
     if (!isAlreadyLogin) {
-      // setSnackbar({
-      // open: true,
-      // message: "You already login",
-      // severity: "warning",
-      // });
-
       setTimeout(() => router.push("/login"), 2000);
       return;
     }

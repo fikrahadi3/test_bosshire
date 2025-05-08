@@ -20,6 +20,8 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     await logout();
+    localStorage.removeItem("carts");
+    localStorage.removeItem("user");
     router.push("/login");
   };
 

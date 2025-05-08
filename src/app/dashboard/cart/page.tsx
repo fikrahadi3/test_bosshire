@@ -1,10 +1,12 @@
 "use client";
 
+import { randomUUID } from "crypto";
 import {
   Alert,
   Box,
   Button,
   Card,
+  Divider,
   Modal,
   Snackbar,
   Table,
@@ -15,20 +17,24 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
+import { DateRangePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterMoment } from "@mui/x-date-pickers-pro/AdapterMoment";
+
+import { Product } from "../../../types/carts";
 
 import { getDataPerPage, renderDate } from "./(utils)/functions";
 import { TABLE_MODAL_SCHEMA, TABLE_SCHEMA } from "./(utils)/schemas";
 import styles from "./(utils)/styles.module.scss";
 import useCart from "./(utils)/useCart";
-import { randomUUID } from "crypto";
-import { Product } from "../../../types/carts";
 
 const Cart = () => {
   const {
     datas,
     modal,
     pagination,
+    search,
     snackbar,
+    handleDateOnChange,
     handleModalClose,
     handleModalOpen,
     handleOnCloseSnackbar,
@@ -46,34 +52,54 @@ const Cart = () => {
   return (
     <div className={styles.cart__container}>
       <Card className={styles.cart__content}>
+        <Box className={styles.content__search}>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DateRangePicker
+              className={styles.datePicker}
+              value={search.date}
+              onChange={(newValue) => handleDateOnChange(newValue)}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Divider />
         <Box className={styles.content__table}>
           <TableContainer>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   {TABLE_SCHEMA.map((column) => (
-                    <TableCell key={column.key} align="center">
+                    <TableCell
+                      className={styles.table__head}
+                      key={column.key}
+                      align="center"
+                    >
                       {column.label}
                     </TableCell>
                   ))}
-                  <TableCell align="center">Products</TableCell>
+                  <TableCell className={styles.table__head} align="center">
+                    Products
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {getDataPerPage(datas, pagination).map((row) => {
                   return (
-                    <TableRow tabIndex={-1} key={`${row.id}-${row.title}`}>
+                    <TableRow tabIndex={-1} key={`${row.id}-${row.userId}`}>
                       {TABLE_SCHEMA.map(({ key, align, render }) => {
                         const value = row[key];
 
                         return (
-                          <TableCell key={key} align={align}>
+                          <TableCell
+                            className={styles.table__body}
+                            key={key}
+                            align={align}
+                          >
                             {render ? render(value) : value}
                           </TableCell>
                         );
                       })}
 
-                      <TableCell align="center">
+                      <TableCell className={styles.table__body} align="center">
                         <Button
                           variant="outlined"
                           onClick={() => handleModalOpen(row)}

@@ -1,16 +1,24 @@
 "use client";
 
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { useEffect, useState } from "react";
+import { PickerRangeValue } from "@mui/x-date-pickers/internals";
 
 import { getCarts } from "../../../../services/carts";
 import { Cart } from "../../../../types/carts";
+
+import { getDataByDateRange } from "./functions";
 
 const useCart = () => {
   const [datas, setDatas] = useState<Cart[]>([]);
   const [pagination, setPagination] = useState({
     pageNo: 0,
     pageSize: 5,
+  });
+  const [search, setSearch] = useState<{
+    date: [Moment | null, Moment | null];
+  }>({
+    date: [null, null],
   });
 
   const [snackbar, setSnackbar] = useState<any>({
@@ -32,8 +40,12 @@ const useCart = () => {
       const resp = await getCarts();
       const data: Cart[] = await resp.json();
 
+      const lsData = localStorage.getItem("carts") || "[]";
+
       setDatas(
-        data.sort((a, b) => moment(b.date).unix() - moment(a.date).unix())
+        [...JSON.parse(lsData), ...data].sort(
+          (a, b) => moment(b.date).unix() - moment(a.date).unix()
+        )
       );
     } catch (err) {
       let mess = "Unknown Error";
@@ -76,15 +88,21 @@ const useCart = () => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
+  const handleDateOnChange = (newValue: PickerRangeValue) => {
+    setSearch((prev) => ({ ...prev, date: newValue }));
+  };
+
   useEffect(() => {
     getDatas();
   }, []);
 
   return {
-    datas,
+    datas: getDataByDateRange(datas, search),
     modal,
     pagination,
+    search,
     snackbar,
+    handleDateOnChange,
     handleModalClose,
     handleModalOpen,
     handleOnCloseSnackbar,

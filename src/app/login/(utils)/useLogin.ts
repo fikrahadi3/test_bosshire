@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
-import { login } from "../../../services/user";
+import { getUsers, login } from "../../../services/user";
 import { addCookie, checkCookie } from "../../../shared/cookies";
+import { User } from "../../../types/user";
 
 const useLogin = () => {
   const router = useRouter();
@@ -19,6 +20,22 @@ const useLogin = () => {
     message: "",
     severity: "",
   });
+
+  const getAllUsers = async (username: string) => {
+    const resp = await getUsers();
+    const data: User[] = await resp.json();
+
+    return (
+      data.find((item) => item.username === username) || {
+        username: username,
+        name: {
+          firstname: username,
+          lastname: username,
+        },
+        id: 0,
+      }
+    );
+  };
 
   const checkIsAlreadyLogin = async () => {
     setIsLoading(true);
@@ -39,8 +56,11 @@ const useLogin = () => {
     setIsLoading(false);
   };
 
-  const handleCookie = async (username: string) => {
-    await addCookie("username", username);
+  const handleCookie = async () => {
+    const { name, id } = await getAllUsers(formData.username);
+
+    await addCookie("username", formData.username || "");
+    localStorage.setItem("user", JSON.stringify({ name, id }));
   };
 
   const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -56,7 +76,7 @@ const useLogin = () => {
         severity: "success",
       });
 
-      handleCookie(formData.username);
+      await handleCookie();
       setTimeout(() => {
         router.push("/dashboard/cart");
       }, 500);

@@ -1,7 +1,7 @@
 .productCard__container {
   width: 100%;
-
-  background-color: #0d1116;
+  background-color: #0d1116 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
 
   display: flex;
   justify-content: center;
@@ -10,7 +10,6 @@
   .productCard__content {
     padding: 8px;
 
-    background-color: #0d1116;
     color: rgba(255, 255, 255, 0.8);
 
     display: flex;
@@ -27,8 +26,13 @@
     }
     .content__text {
       .text__description {
+        width: 100%;
+
+        background-color: #0d1116;
+        border-color: rgba(255, 255, 255, 0.2);
         padding: 8px;
         font-size: 12px;
+        box-sizing: border-box;
       }
       .text__category,
       .text__price {
@@ -47,6 +51,9 @@
         justify-content: center;
         align-items: center;
         gap: 4px;
+      }
+      .form__button {
+        border: 1px solid rgba(255, 255, 255, 0.2);
       }
     }
   }
