@@ -3,7 +3,6 @@
 import {
   Box,
   Card,
-  Divider,
   Table,
   TableBody,
   TableCell,
