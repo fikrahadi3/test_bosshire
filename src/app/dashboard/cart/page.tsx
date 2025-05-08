@@ -2,7 +2,9 @@
 
 import {
   Box,
+  Button,
   Card,
+  Modal,
   Table,
   TableBody,
   TableCell,
@@ -12,14 +14,28 @@ import {
   TableRow,
 } from "@mui/material";
 
-import { getDataPerPage } from "./(utils)/functions";
-import { TABLE_SCHEMA } from "./(utils)/schemas";
+import { getDataPerPage, renderDate } from "./(utils)/functions";
+import { TABLE_MODAL_SCHEMA, TABLE_SCHEMA } from "./(utils)/schemas";
 import styles from "./(utils)/styles.module.scss";
 import useCart from "./(utils)/useCart";
+import { randomUUID } from "crypto";
+import { Product } from "../../../types/carts";
 
 const Cart = () => {
-  const { datas, pagination, handleOnPageChange, handleOnRowsPerPageChange } =
-    useCart();
+  const {
+    datas,
+    modal,
+    pagination,
+    handleModalClose,
+    handleModalOpen,
+    handleOnPageChange,
+    handleOnRowsPerPageChange,
+  } = useCart();
+
+  const {
+    openModal,
+    selectedData: { products, userId, date },
+  } = modal;
 
   return (
     <div className={styles.cart__container}>
@@ -34,6 +50,7 @@ const Cart = () => {
                       {column.label}
                     </TableCell>
                   ))}
+                  <TableCell align="center">Products</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -49,6 +66,15 @@ const Cart = () => {
                           </TableCell>
                         );
                       })}
+
+                      <TableCell align="center">
+                        <Button
+                          variant="outlined"
+                          onClick={() => handleModalOpen(row)}
+                        >
+                          Show Detail
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -66,6 +92,50 @@ const Cart = () => {
           />
         </Box>
       </Card>
+      <Modal
+        className={styles.modal__container}
+        open={openModal}
+        onClose={handleModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Card className={styles.modal__content}>
+          <h3>Products Detail</h3>
+          <p>User ID: {userId}</p>
+          <p>Date: {renderDate(date || "")}</p>
+
+          <TableContainer>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  {TABLE_MODAL_SCHEMA.map((column) => (
+                    <TableCell key={column.key} align="center">
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {products?.map((row: Product) => {
+                  return (
+                    <TableRow tabIndex={-1} key={`${randomUUID}}`}>
+                      {TABLE_MODAL_SCHEMA.map(({ key, align, render }) => {
+                        const value = row?.[key as keyof Product] || "";
+
+                        return (
+                          <TableCell key={key} align={align}>
+                            {render ? render(String(value)) : value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+      </Modal>
     </div>
   );
 };

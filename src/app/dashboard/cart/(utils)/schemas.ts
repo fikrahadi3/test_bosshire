@@ -1,4 +1,4 @@
-import { renderDate, renderProducts } from "./functions";
+import { renderDate, renderPrice } from "./functions";
 import { TableSchema } from "./types";
 
 export const TABLE_SCHEMA: TableSchema[] = [
@@ -18,10 +18,17 @@ export const TABLE_SCHEMA: TableSchema[] = [
     align: "center",
     render: renderDate,
   },
+];
+
+export const TABLE_MODAL_SCHEMA: TableSchema[] = [
   {
-    label: "Products",
-    key: "[products, productId]",
+    label: "ID",
+    key: "productId",
     align: "center",
-    render: renderProducts,
+  },
+  {
+    label: "Quantity",
+    key: "quantity",
+    align: "center",
   },
 ];

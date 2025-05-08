@@ -12,6 +12,14 @@ const useCart = () => {
     pageSize: 5,
   });
 
+  const [modal, setModal] = useState<{
+    openModal: boolean;
+    selectedData: Cart;
+  }>({
+    openModal: false,
+    selectedData: {},
+  });
+
   const getDatas = async () => {
     try {
       const resp = await getCarts();
@@ -41,13 +49,30 @@ const useCart = () => {
     });
   };
 
+  const handleModalOpen = (values: Cart) => {
+    setModal({
+      openModal: true,
+      selectedData: values,
+    });
+  };
+
+  const handleModalClose = () => {
+    setModal({
+      openModal: false,
+      selectedData: {},
+    });
+  };
+
   useEffect(() => {
     getDatas();
   }, []);
 
   return {
     datas,
+    modal,
     pagination,
+    handleModalClose,
+    handleModalOpen,
     handleOnPageChange,
     handleOnRowsPerPageChange,
   };

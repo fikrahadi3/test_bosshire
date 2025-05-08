@@ -12,10 +12,6 @@ export const renderDate = (date: string) => {
   return moment(date).format("DD MMM YYYY - hh:mm:ss");
 };
 
-export const renderProducts = () => {
-  return (
-    <Button variant="outlined" onClick={() => console.log("HADISINI_CLICK")}>
-      Show
-    </Button>
-  );
+export const renderPrice = (value: string) => {
+  return `$ ${value}`;
 };
