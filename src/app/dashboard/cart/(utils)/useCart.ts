@@ -12,6 +12,12 @@ const useCart = () => {
     pageSize: 5,
   });
 
+  const [snackbar, setSnackbar] = useState<any>({
+    open: false,
+    message: "",
+    severity: "",
+  });
+
   const [modal, setModal] = useState<{
     openModal: boolean;
     selectedData: Cart;
@@ -24,17 +30,17 @@ const useCart = () => {
     try {
       const resp = await getCarts();
       const data = await resp.json();
-      console.log("HADISINI_DATA", data, resp);
+
       setDatas(data);
     } catch (err) {
       let mess = "Unknown Error";
       if (err instanceof Error) mess = err.message;
-      console.log("HADISINI_ERR CARTS", mess);
-      // setSnackbar({
-      //   open: true,
-      //   message: mess,
-      //   severity: "error",
-      // });
+
+      setSnackbar({
+        open: true,
+        message: mess,
+        severity: "error",
+      });
     }
   };
 
@@ -63,6 +69,10 @@ const useCart = () => {
     });
   };
 
+  const handleOnCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
+
   useEffect(() => {
     getDatas();
   }, []);
@@ -71,8 +81,10 @@ const useCart = () => {
     datas,
     modal,
     pagination,
+    snackbar,
     handleModalClose,
     handleModalOpen,
+    handleOnCloseSnackbar,
     handleOnPageChange,
     handleOnRowsPerPageChange,
   };

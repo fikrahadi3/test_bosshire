@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  Alert,
   Box,
   Button,
   Card,
   Modal,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -26,8 +28,10 @@ const Cart = () => {
     datas,
     modal,
     pagination,
+    snackbar,
     handleModalClose,
     handleModalOpen,
+    handleOnCloseSnackbar,
     handleOnPageChange,
     handleOnRowsPerPageChange,
   } = useCart();
@@ -36,6 +40,8 @@ const Cart = () => {
     openModal,
     selectedData: { products, userId, date },
   } = modal;
+
+  const { open, message, severity } = snackbar;
 
   return (
     <div className={styles.cart__container}>
@@ -136,6 +142,18 @@ const Cart = () => {
           </TableContainer>
         </Card>
       </Modal>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={open}
+      >
+        <Alert
+          severity={severity}
+          variant="filled"
+          onClose={handleOnCloseSnackbar}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
