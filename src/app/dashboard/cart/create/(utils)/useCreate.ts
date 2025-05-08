@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { Product, ProductDetail } from "../../../../../types/carts";
 import { addCart, getProducts } from "../../../../../services/carts";
 
+import { isDuplicate, isLessThanZero } from "./functions";
+
 const useCreate = () => {
   const router = useRouter();
 
@@ -34,12 +36,33 @@ const useCreate = () => {
     }
   };
 
+  const handleDeleteProduct = (productId: number) => {
+    setDatas((prev) => prev.filter((item) => item.productId !== productId));
+  };
+
   const handleAddProduct = (
     productId: number,
     quantity: number,
     title: string,
     price: number
   ) => {
+    if (isLessThanZero(quantity)) {
+      setSnackbar({
+        open: true,
+        message: "Quantity should be more than 0",
+        severity: "warning",
+      });
+      return;
+    }
+    if (isDuplicate(productId, datas)) {
+      setSnackbar({
+        open: true,
+        message: "Can't add duplicate product",
+        severity: "warning",
+      });
+      return;
+    }
+
     setDatas((prev) => [
       ...prev,
       { productId, quantity, title, price, totalPrice: price * quantity },
@@ -87,6 +110,7 @@ const useCreate = () => {
     products,
     snackbar,
     handleAddProduct,
+    handleDeleteProduct,
     handleOnClose,
     handleSubmit,
   };

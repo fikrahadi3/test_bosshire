@@ -1,5 +1,6 @@
 "use client";
 
+import { randomUUID } from "crypto";
 import {
   Alert,
   Box,
@@ -15,12 +16,13 @@ import {
   TableRow,
 } from "@mui/material";
 
-import styles from "./(utils)/styles.module.scss";
-import { TABLE_SCHEMA } from "./(utils)/schemas";
-import { randomUUID } from "crypto";
-import useCreate from "./(utils)/useCreate";
 import ProductCard from "../../../../components/ProductCard";
 import { Product } from "../../../../types/carts";
+
+import { TABLE_SCHEMA } from "./(utils)/schemas";
+import styles from "./(utils)/styles.module.scss";
+import useCreate from "./(utils)/useCreate";
+import { DeleteOutlineOutlined } from "@mui/icons-material";
 
 const CreateCart = () => {
   const {
@@ -28,6 +30,7 @@ const CreateCart = () => {
     products,
     snackbar,
     handleAddProduct,
+    handleDeleteProduct,
     handleOnClose,
     handleSubmit,
   } = useCreate();
@@ -57,6 +60,7 @@ const CreateCart = () => {
                       {column.label}
                     </TableCell>
                   ))}
+                  <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -73,12 +77,21 @@ const CreateCart = () => {
                             </TableCell>
                           );
                         })}
+                        <TableCell align="center">
+                          <Button
+                            variant="outlined"
+                            startIcon={<DeleteOutlineOutlined />}
+                            onClick={() => handleDeleteProduct(row.productId)}
+                          >
+                            Delete
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     );
                   })
                 ) : (
                   <TableRow tabIndex={-1}>
-                    <TableCell colSpan={5}>No Data</TableCell>
+                    <TableCell colSpan={6}>No Data</TableCell>
                   </TableRow>
                 )}
               </TableBody>

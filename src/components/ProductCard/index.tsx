@@ -58,7 +58,7 @@ const ProductCard = ({
         </Box>
         <Box className={styles.content__form}>
           <div className={styles.form__count}>
-            <IconButton onClick={() => setCount(count - 1)}>
+            <IconButton onClick={() => (count > 0 ? setCount(count - 1) : 0)}>
               <RemoveCircleOutlineOutlined />
             </IconButton>
             <div className={styles.count__number}>{count}</div>
