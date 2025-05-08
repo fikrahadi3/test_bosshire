@@ -9,10 +9,20 @@ import {
   ListItemText,
 } from "@mui/material";
 
+import { logout } from "../../shared/cookies";
+
 import { MENU_LISTS } from "./utils/constants";
 import styles from "./utils/styles.module.scss";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/login");
+  };
+
   return (
     <div className={styles.sidebar__container}>
       <Box className={styles.sidebar__content} role="presentation">
@@ -26,6 +36,14 @@ const Sidebar = () => {
               </ListItem>
             </Link>
           ))}
+          <ListItem className={styles.list__item}>
+            <ListItemButton
+              className={styles.item__button}
+              onClick={handleLogout}
+            >
+              <ListItemText className={styles.item__text} primary="Logout" />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Box>
     </div>
