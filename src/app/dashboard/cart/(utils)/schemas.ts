@@ -8,7 +8,7 @@ export const TABLE_SCHEMA: TableSchema[] = [
     align: "center",
   },
   {
-    label: "User",
+    label: "User ID",
     key: "userId",
     align: "center",
   },
