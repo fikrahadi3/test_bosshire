@@ -1,5 +1,6 @@
 "use client";
 
+import moment from "moment";
 import { useEffect, useState } from "react";
 
 import { getCarts } from "../../../../services/carts";
@@ -29,9 +30,11 @@ const useCart = () => {
   const getDatas = async () => {
     try {
       const resp = await getCarts();
-      const data = await resp.json();
+      const data: Cart[] = await resp.json();
 
-      setDatas(data);
+      setDatas(
+        data.sort((a, b) => moment(b.date).unix() - moment(a.date).unix())
+      );
     } catch (err) {
       let mess = "Unknown Error";
       if (err instanceof Error) mess = err.message;
