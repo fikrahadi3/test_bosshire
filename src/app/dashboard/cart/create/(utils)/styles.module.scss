@@ -1,9 +1,9 @@
-.cart__container {
+.createCart__container {
   width: 100%;
   min-height: 100vh;
   background-color: #0d1116;
 
-  .cart__content {
+  .createCart__content {
     padding: 16px;
     margin: 16px;
 
@@ -20,6 +20,22 @@
       background-color: #0d1116;
       border-color: rgba(255, 255, 255, 0.2);
       color: rgba(255, 255, 255, 0.8);
+    }
+
+    .content__head {
+      width: 100%;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .content__table {
+      * {
+        background-color: #0d1116;
+        border-color: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.8);
+      }
     }
   }
 }
