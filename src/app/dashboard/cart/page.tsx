@@ -1,6 +1,5 @@
 "use client";
 
-import { randomUUID } from "crypto";
 import {
   Alert,
   Box,
@@ -83,9 +82,12 @@ const Cart = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {getDataPerPage(datas, pagination).map((row) => {
+                {getDataPerPage(datas, pagination).map((row, index) => {
                   return (
-                    <TableRow tabIndex={-1} key={`${row.id}-${row.userId}`}>
+                    <TableRow
+                      tabIndex={-1}
+                      key={`${row.id}-${row.userId}-${index}`}
+                    >
                       {TABLE_SCHEMA.map(({ key, align, render }) => {
                         const value = row[key];
 
@@ -151,7 +153,7 @@ const Cart = () => {
               <TableBody>
                 {products?.map((row: Product) => {
                   return (
-                    <TableRow tabIndex={-1} key={`${randomUUID}}`}>
+                    <TableRow tabIndex={-1} key={`${row.productId}-table}`}>
                       {TABLE_MODAL_SCHEMA.map(({ key, align, render }) => {
                         const value = row?.[key as keyof Product] || "";
 
