@@ -58,6 +58,7 @@ const Cart = () => {
               className={styles.datePicker}
               value={search.date}
               onChange={(newValue) => handleDateOnChange(newValue)}
+              slotProps={{ field: { clearable: true } }}
             />
           </LocalizationProvider>
         </Box>
