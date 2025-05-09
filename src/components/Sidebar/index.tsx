@@ -20,7 +20,9 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     await logout();
-    localStorage.removeItem("carts");
+    // For now I will off this remove,
+    // so it will be actual data
+    // localStorage.removeItem("carts");
     localStorage.removeItem("user");
     router.push("/login");
   };
