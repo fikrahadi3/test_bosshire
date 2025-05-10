@@ -33,12 +33,14 @@ const Navbar = () => {
         <div className={styles.content__left}>Logo</div>
         <div className={styles.content__right}>
           {name ? (
-            <>
+            <Link className={styles.links} href={"/dashboard/cart"}>
               <p>Hi, {name}</p>
               <Avatar alt="profile" src="/images/profile-1.jpeg" />
-            </>
+            </Link>
           ) : (
-            <Link href={"/login"}>Login</Link>
+            <Link className={styles.links} href={"/login"}>
+              Login
+            </Link>
           )}
         </div>
       </div>

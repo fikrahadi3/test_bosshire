@@ -1,0 +1,23 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+
+  .center {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+
+    h1,
+    h3 {
+      margin: 0;
+    }
+  }
+}
